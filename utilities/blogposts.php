@@ -47,7 +47,8 @@ function get_users($post_id, $select_statment) {
         // $select_statment->bindParam(":table", $table);
         $select_statment->bindParam(":post_id", $post_id);
 
-        var_dump($select_statment->execute());
+        // var_dump($select_statment->execute());
+        $select_statment->execute();
         $users = $select_statment->fetchAll(PDO::FETCH_ASSOC);
         
         return !empty($users) ? $users : null;
