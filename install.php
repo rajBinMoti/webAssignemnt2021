@@ -5,8 +5,7 @@ $first_installation = true;
 
 try {
     $db_connection = new PDO("mysql:host=localhost;dbname=" . DB_NAME, DB_USER, DB_PASS);
-}
-catch (PDOException $e) {
+} catch (PDOException $e) {
     $first_installation = false;
 }
 
@@ -15,7 +14,7 @@ if ($first_installation) {
     exit();
 }
 
-$db_blog_host= "CREATE DATABASE IF NOT EXISTS " . DB_NAME;
+$db_blog_host = "CREATE DATABASE IF NOT EXISTS " . DB_NAME;
 
 $table_user = "
 CREATE TABLE IF NOT EXISTS User (
@@ -65,6 +64,19 @@ CREATE TABLE IF NOT EXISTS BlogPostReads (
     CONSTRAINT FK_user_id_User_BlogPostReads FOREIGN KEY (user_id) REFERENCES User (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT
 );";
 
+$table_blogpost_comments = "
+CREATE TABLE IF NOT EXISTS BlogPostComments (
+    comment_id int AUTO_INCREMENT,
+    post_id int,
+    user_id int,
+    comment_text text NOT NULL,
+    comment_date datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT PK_comment_id PRIMARY KEY (comment_id),
+    CONSTRAINT FK_post_id_BlogPosts FOREIGN KEY (post_id) REFERENCES BlogPost (post_id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+    CONSTRAINT FK_user_id_User FOREIGN KEY (user_id) REFERENCES User (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+);
+";
+
 // TO-DO: Store password as hash
 $insert_users = "
 INSERT INTO
@@ -91,6 +103,11 @@ $insert_blogpostreads = "
 INSERT INTO
 BlogPostReads (post_id, user_id)
 VALUES (:post_id, :user_id)";
+
+$insert_comments = "
+INSERT INTO blogPostComments (post_id, user_id, comment_text) 
+VALUES (:post_id, :user_id, :comment_text);
+";
 
 // Data users
 $users = [
@@ -188,6 +205,30 @@ $blogsreads = [
     ]
 ];
 
+// comments data 
+$blogpostComments = [
+    [
+        "post_id" => 1,
+        "user_id" => 2,
+        "comment_text" => "This is first comment by user 2 on post id 1"
+    ],
+    [
+        "post_id" => 2,
+        "user_id" => 1,
+        "comment_text" => "This is second comment by user 1 on post id 2"
+    ],
+    [
+        "post_id" => 2,
+        "user_id" => 2,
+        "comment_text" => "This is self comment by user 2 on post 2"
+    ],
+    [
+        "post_id" => 1,
+        "user_id" => 1,
+        "comment_text" => "This is self comment by user 1 on post 1"
+    ],
+];
+
 try {
     $db_connection = new PDO("mysql:host=localhost", DB_USER, DB_PASS);
 
@@ -202,6 +243,7 @@ try {
     $db_connection->exec($table_blogpost);
     $db_connection->exec($table_blogpost_likes);
     $db_connection->exec($table_blogpost_reads);
+    $db_connection->exec($table_blogpost_comments);
 
     //------------------------------------------------------
     //   Insert data for users
@@ -216,7 +258,7 @@ try {
     $statment->bindParam(":user_pass", $user_pass);
     $statment->bindParam(":user_full_name", $user_full_name);
 
-    foreach($users as $user) {
+    foreach ($users as $user) {
         $user_name = $user['user_name'];
         $user_pass = $user['user_pass'];
         $user_pass = password_hash($user_pass, PASSWORD_DEFAULT);
@@ -236,7 +278,7 @@ try {
     $statment->bindParam(":user_id", $user_id);
     $statment->bindParam(":follower_id", $follower_id);
 
-    foreach($userfollowers as $userfollower) {
+    foreach ($userfollowers as $userfollower) {
         $user_id = $userfollower['user_id'];
         $follower_id = $userfollower['follower_id'];
         $statment->execute();
@@ -259,7 +301,7 @@ try {
     $statment->bindParam(":post_public", $blog_post_public);
     $statment->bindParam(":post_date", $blog_post_date);
 
-    foreach($blogs as $blog) {
+    foreach ($blogs as $blog) {
         $user_id = $blog['user_id'];
         $blog_post_title = $blog['post_title'];
         $blog_post_body = $blog['post_body'];
@@ -280,7 +322,7 @@ try {
     $statment->bindParam(":user_id", $user_id);
     $statment->bindParam(":post_id", $post_id);
 
-    foreach($blogslikes as $blogslike) {
+    foreach ($blogslikes as $blogslike) {
         $user_id = $blogslike['user_id'];
         $post_id = $blogslike['post_id'];
         $statment->execute();
@@ -297,23 +339,41 @@ try {
     $statment->bindParam(":user_id", $user_id);
     $statment->bindParam(":post_id", $post_id);
 
-    foreach($blogsreads as $blogsread) {
+    foreach ($blogsreads as $blogsread) {
         $post_id = $blogsread['post_id'];
         $user_id = $blogsread['user_id'];
         $statment->execute();
     }
 
+    // ------------------------------------------------------
+    //      Insert data for comments
+    // ------------------------------------------------------
+
+    $post_id = "";
+    $user_id = "";
+    $comment_text = "";
+
+    $statment = $db_connection->prepare($insert_comments);
+    $statment->bindParam(":post_id", $post_id);
+    $statment->bindParam(":user_id", $user_id);
+    $statment->bindParam(":comment_text", $comment_text);
+
+    foreach ($blogpostComments as $comment) {
+        $post_id = $comment['post_id'];
+        $user_id = $comment['user_id'];
+        $comment_text = $comment['comment_text'];
+        $statment->execute();
+    }
+
     $success = true;
-}
-catch (PDOException $e) {
+} catch (PDOException $e) {
     var_dump($e);
     $success = false;
 }
 
-$message = $success?
-"Congratulations: instalation is successful":
-"Oops: instalation is unsuccessful";
+$message = $success ?
+    "Congratulations: instalation is successful" :
+    "Oops: instalation is unsuccessful";
 ?>
 
-<h1><?=$message?></h1>
-
+<h1><?= $message ?></h1>
