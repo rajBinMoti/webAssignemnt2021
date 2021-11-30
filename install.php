@@ -19,7 +19,7 @@ $db_blog_host = "CREATE DATABASE IF NOT EXISTS " . DB_NAME;
 $table_user = "
 CREATE TABLE IF NOT EXISTS User (
     user_id int AUTO_INCREMENT,
-    user_name varchar(50) NOT NULL,
+    user_name varchar(50) NOT NULL UNIQUE,
     user_pass varchar(100) NOT NULL,
     user_full_name varchar(100) NOT NULL,
     CONSTRAINT PK_user_id_User PRIMARY KEY (user_id)

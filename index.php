@@ -46,6 +46,7 @@ if (isset($_POST['user-name'])) {
 			</div>
 			<div>
 				<input type="submit" value="Submit" />
+				<a href="signup.php">Not registered yet?</a>
 			</div>
 		</form>
 	</div>

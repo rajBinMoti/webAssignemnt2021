@@ -44,9 +44,8 @@ if (isset($_POST['delete-post'])) {
 
     <?php require_once 'header.php'; ?>
 
-    <?php if (isset($user_posts)) : ?>
+    <?php if (isset($user_posts) && sizeof($user_posts) > 0) : ?>
         <?php foreach ($user_posts as $key => $value) : ?>
-
             <div class="m-3 bg-light">
                 <h2><?= $value['post_title']  ?></h2>
                 <p><?= $value['post_body']  ?></p>
@@ -62,6 +61,10 @@ if (isset($_POST['delete-post'])) {
 
         <?php endforeach ?>
 
+    <?php else : ?>
+        <div class="bg-light w-80 m-4">
+            <h5 class="h5">No Blog Posted Yet! <a href="./addpost.php"> Click here to add first blog! </a></h5>
+        </div>
     <?php endif ?>
 
 
