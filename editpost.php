@@ -15,6 +15,9 @@ function update_post($post_id, $post_title, $post_body, $post_check)
         UPDATE blogpost SET post_title = :post_title, post_body = :post_body, post_public = :post_check WHERE post_id = :post_id;
         ";
 
+        // print_r($post_check);
+        // die();
+
         $statement = $db->prepare($statement);
         $statement->bindParam(":post_id", $post_id);
         $statement->bindParam(":post_title", $post_title);
@@ -33,7 +36,7 @@ if (isset($_POST['update-post'])) {
     $post_id = $_GET['post-id'];
     $post_title = $_POST['post-title'];
     $post_body = $_POST['post-body'];
-    $post_check = $_POST['post-check'] == '1' ? 1 : 0;
+    $post_check = $_POST['post-check'] == 'on' ? 1 : 0;
 
     $res = update_post($post_id, $post_title, $post_body, $post_check);
     if ($res == "UPDATED") {
@@ -82,7 +85,7 @@ if (isset($_GET['post-id'])) {
             <textarea type="text" class="form-control" name="post-body" value='<?= ($post['post_body']) ?>' required><?= ($post['post_body']) ?></textarea>
         </div>
         <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" name="post-check" <?php $post['post_public'] == '1' ? 'checked' : '' ?>>
+            <input type="checkbox" class="form-check-input" name="post-check" <?= $post['post_public'] == '1'  ? 'checked' : '' ?>>
             <label for="post-check" class="form-label">Publish</label>
         </div>
         <button class="btn btn-primary" name="update-post" size='sm'>UPDATE</button>
