@@ -108,14 +108,47 @@ function is_post_liked($post_id, $user_id)
 }
 
 
+function check_read($post_id, $user_id)
+{
+    try {
+        $db = db_connect();
+        $statement = "
+        SELECT count(*) FROM blogpostreads WHERE user_id = :user_id AND post_id = :post_id;
+        ";
+        $statement = $db->prepare($statement);
+        $statement->bindParam(':user_id', $user_id);
+        $statement->bindParam(':post_id', $post_id);
+
+        $statement->execute();
+        $res = $statement->fetchColumn();
+        if ($res > "0") return 0;
+        else {
+            // mark as read
+            $statement = "
+            INSERT INTO blogpostreads (user_id, post_id) VALUES (:user_id, :post_id);
+            ";
+            $statement = $db->prepare($statement);
+            $statement->bindParam(':user_id', $user_id);
+            $statement->bindParam(':post_id', $post_id);
+
+            $statement->execute();
+            return 1;
+        };
+    } catch (PDOException $th) {
+        return 'ERROR';
+    }
+}
+
+
 
 $post_id = $_GET['id'];
 $user_id = $user['user_id'];
 $isLiked = is_post_liked($post_id, $user_id);
 
-// die($isLiked);
+$is_post_read = check_read($post_id, $user_id);
 
 $post = get_post_by_id($post_id);
+
 $post_title = $post['post_title'];
 $post_body = $post['post_body'];
 $author = $post['user'];
