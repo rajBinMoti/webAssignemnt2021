@@ -83,7 +83,30 @@ function get_comments_by_id($post_id)
     }
 }
 
+function is_post_liked($post_id, $user_id)
+{
+    try {
+        $db = db_connect();
+        $statement = "
+        SELECT count(*) FROM blogpostlikes WHERE user_id = :user_id AND post_id = :post_id;
+        ";
+        $statement = $db->prepare($statement);
+        $statement->bindParam(':user_id', $user_id);
+        $statement->bindParam(':post_id', $post_id);
+
+        $statement->execute();
+        $res = $statement->fetch();
+        return sizeof($res) > 0 ? 1 : 0;
+    } catch (PDOException $th) {
+        return 'ERROR';
+    }
+}
+
+
+
 $post_id = $_GET['id'];
+$user_id = $user['user_id'];
+$isLiked = is_post_liked($post_id, $user_id);
 
 $post = get_post_by_id($post_id);
 $post_title = $post['post_title'];
@@ -133,6 +156,10 @@ $comments = get_comments_by_id($post_id);
                     </div>
                 </div>
                 <div class="row border-top mt-2">
+                    <div class="col">
+                        <?= $isLiked != '0' ? '<a href="<?=togglelike.php?post_id=<?= $post_id ?>&user_id=<?= $user_id ?>&isLiked=0"?>>Like</a>' 
+                        : '<a href="togglelike.php?post_id=<?= $post_id ?>&user_id=<?= $user_id ?>&isLiked=1">Dislike</a>' ?>
+                    </div>
                     <div class="col">
                         <?php if ($likes > 0) : ?>
                             <a href="postlikes.php?id=<?= $post_id ?>">
