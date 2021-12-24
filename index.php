@@ -2,6 +2,7 @@
 session_start();
 
 require_once 'utilities/user.php';
+require_once 'utilities/post.php';
 
 if (isset($_POST['user-name'])) {
 	$user_name = $_POST['user-name'];
@@ -10,6 +11,19 @@ if (isset($_POST['user-name'])) {
 	$user = do_login($user_name, $user_pass);
 
 	if ($user != null) {
+		// get likes, comments, reads, and followers of both, user itself and others
+		$user_id = $user['user_id'];
+		$user['user_likes'] = get_user_likes($user_id);
+		$user['user_reads'] = get_user_reads($user_id);
+		$user['user_comments'] = get_user_comments($user_id);
+		$user['user_follows'] = get_user_follows($user_id);
+		$user['user_posts'] = sizeof(get_user_posts($user_id));
+
+		// $user['other_likes'] = get_other_likes($user_id);
+		// $user['other_reads'] = get_other_reads($user_id);
+		// $user['other_comments'] = get_other_comments($user_id);
+		// $user['other_follows'] = get_other_follows($user_id);
+
 		$_SESSION["_user"] = $user;
 		header("Location: home.php");
 	}

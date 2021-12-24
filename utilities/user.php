@@ -65,3 +65,126 @@ function is_user_loggedin()
     $user = $_SESSION["_user"];
     return !empty($user);
 }
+
+// get likes, comments, reads, and followers of both, user itself and others
+
+function get_user_likes($user_id)
+{
+    try {
+        $db = db_connect();
+        
+        $statement = "SELECT count(*) FROM blogPostLikes WHERE user_id = :user_id";
+        
+        $statement = $db->prepare($statement);
+        $statement->bindParam(":user_id", $user_id);
+        $statement->execute();
+        return $statement->fetchColumn();
+    } catch (PDOException $e) {
+        //throw $th;
+    }
+}
+function get_user_reads($user_id)
+{
+    try {
+        $db = db_connect();
+        
+        $statement = "SELECT count(*) FROM blogPostReads WHERE user_id = :user_id";
+        
+        $statement = $db->prepare($statement);
+        $statement->bindParam(":user_id", $user_id);
+        $statement->execute();
+        return $statement->fetchColumn();
+    } catch (PDOException $e) {
+        //throw $th;
+    }
+}
+function get_user_comments($user_id)
+{
+    try {
+        $db = db_connect();
+        
+        $statement = "SELECT count(*) FROM blogPostComments WHERE user_id = :user_id";
+        
+        $statement = $db->prepare($statement);
+        $statement->bindParam(":user_id", $user_id);
+        $statement->execute();
+        return $statement->fetchColumn();
+    } catch (PDOException $e) {
+        //throw $th;
+    }
+}
+function get_user_follows($user_id)
+{
+    try {
+        $db = db_connect();
+        
+        $statement = "SELECT count(*) FROM userFollower WHERE user_id = :user_id";
+        
+        $statement = $db->prepare($statement);
+        $statement->bindParam(":user_id", $user_id);
+        $statement->execute();
+        return $statement->fetchColumn();
+    } catch (PDOException $e) {
+        //throw $th;
+    }
+}
+// function get_other_likes($user_id)
+// {
+//     try {
+//         $db = db_connect();
+        
+//         $statement = "SELECT count(*) FROM blogPostLikes WHERE user_id = :user_id";
+        
+//         $statement = $db->prepare($statement);
+//         $statement->bindParam(":user_id", $user_id);
+//         $statement->execute();
+//         return $statement->fetchColumn();
+//     } catch (PDOException $e) {
+//         //throw $th;
+//     }
+// }
+// function get_other_reads($user_id)
+// {
+//     try {
+//         $db = db_connect();
+        
+//         $statement = "SELECT count(*) FROM blogPostLikes WHERE user_id = :user_id";
+        
+//         $statement = $db->prepare($statement);
+//         $statement->bindParam(":user_id", $user_id);
+//         $statement->execute();
+//         return $statement->fetchColumn();
+//     } catch (PDOException $e) {
+//         //throw $th;
+//     }
+// }
+// function get_other_comments($user_id)
+// {
+//     try {
+//         $db = db_connect();
+        
+//         $statement = "SELECT count(*) FROM blogPostLikes WHERE user_id = :user_id";
+        
+//         $statement = $db->prepare($statement);
+//         $statement->bindParam(":user_id", $user_id);
+//         $statement->execute();
+//         return $statement->fetchColumn();
+//     } catch (PDOException $e) {
+//         //throw $th;
+//     }
+// }
+// function get_other_follows($user_id)
+// {
+//     try {
+//         $db = db_connect();
+        
+//         $statement = "SELECT count(*) FROM blogPostLikes WHERE user_id = :user_id";
+        
+//         $statement = $db->prepare($statement);
+//         $statement->bindParam(":user_id", $user_id);
+//         $statement->execute();
+//         return $statement->fetchColumn();
+//     } catch (PDOException $e) {
+//         //throw $th;
+//     }
+// }

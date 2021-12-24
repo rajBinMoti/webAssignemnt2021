@@ -27,6 +27,10 @@ if (isset($_SESSION['_user'])) {
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="addpost.php">Add Post</a></li>
                             <li><a class="dropdown-item" href="viewposts.php">View Post</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="profile.php?user_id=<?= $user['user_id'] ?>">Profile</a></li>
                         </ul>
                     </li>
                 <?php endif; ?>

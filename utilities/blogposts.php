@@ -1,7 +1,8 @@
 <?php
 require_once 'db.php';
 
-function get_all_posts() {
+function get_all_posts()
+{
     try {
         $db_connection = db_connect();
 
@@ -22,35 +23,46 @@ function get_all_posts() {
         $blogposts = $select_statment->fetchAll(PDO::FETCH_ASSOC);
 
         return !empty($blogposts) ? $blogposts : null;
-    }
-    catch (PDOException $e) {
+    } catch (PDOException $e) {
         var_dump($e);
         return null;
     }
 }
 
-function get_users_who_like($post_id) {
+function get_users_who_like($post_id)
+{
     $select_statment = "
         SELECT u.user_full_name FROM BlogPostLikes b JOIN User u ON b.user_id = u.user_id WHERE post_id = :post_id;";
 
     return get_users($post_id, $select_statment);
 }
 
-function get_users_who_read($post_id) {
+function get_users_who_read($post_id)
+{
     $select_statment = "
         SELECT u.user_full_name FROM BlogPostReads b JOIN User u ON b.user_id = u.user_id WHERE post_id = :post_id;";
 
     return get_users($post_id, $select_statment);
 }
 
-function get_users_who_comment($post_id) {
+function get_users_who_comment($post_id)
+{
     $select_statment = "
         SELECT u.user_full_name FROM BlogPostComments b JOIN User u ON b.user_id = u.user_id WHERE post_id = :post_id;";
 
     return get_users($post_id, $select_statment);
 }
 
-function get_users($post_id, $select_statment) {
+function get_users_who_are_followed($user_id)
+{
+    $select_statment = "
+        SELECT u.user_full_name FROM UserFollower b  JOIN User u ON b.follower_id = u.user_id WHERE u.user_id != :post_id;";
+
+    return get_users($user_id, $select_statment);
+}
+
+function get_users($post_id, $select_statment)
+{
     try {
         $db_connection = db_connect();
 
@@ -65,10 +77,9 @@ function get_users($post_id, $select_statment) {
         // var_dump($select_statment->execute());
         $select_statment->execute();
         $users = $select_statment->fetchAll(PDO::FETCH_ASSOC);
-        
+
         return !empty($users) ? $users : null;
-    }
-    catch (PDOException $e) {
+    } catch (PDOException $e) {
         var_dump($e);
         return null;
     }
