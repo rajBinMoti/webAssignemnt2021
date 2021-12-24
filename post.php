@@ -43,11 +43,13 @@ function get_post_by_id($post_id)
         $db = db_connect();
 
         $select_statment = "
-        SELECT bp.post_title, bp.post_date, bp.post_body, bu.user_full_name 'user', count(*) 'read', count(*) 'like'
+        SELECT bp.post_title, bp.post_date, bp.post_body, bu.user_full_name 'user', 
+        (SELECT COUNT(*) FROM BlogPostLikes WHERE post_id = bp.post_id) 'like', 
+        (SELECT COUNT(*) FROM BlogPostReads WHERE post_id = bp.post_id) 'read'
         FROM blogpost bp
         JOIN user bu on bu.user_id = bp.user_id
-        JOIN blogpostreads br on br.post_id = bp.post_id
-        JOIN blogpostlikes bl on bl.post_id = bp.post_id
+        LEFT JOIN blogpostreads br on br.post_id = bp.post_id
+        LEFT JOIN blogpostlikes bl on bl.post_id = bp.post_id
         WHERE bp.post_id = :post_id 
         ";
 
@@ -95,8 +97,11 @@ function is_post_liked($post_id, $user_id)
         $statement->bindParam(':post_id', $post_id);
 
         $statement->execute();
-        $res = $statement->fetch();
-        return sizeof($res) > 0 ? 1 : 0;
+        $res = $statement->fetchColumn();
+        // var_dump($res);
+        // die();
+        if ($res > "0") return 0;
+        else return 1;
     } catch (PDOException $th) {
         return 'ERROR';
     }
@@ -108,13 +113,17 @@ $post_id = $_GET['id'];
 $user_id = $user['user_id'];
 $isLiked = is_post_liked($post_id, $user_id);
 
+// die($isLiked);
+
 $post = get_post_by_id($post_id);
 $post_title = $post['post_title'];
 $post_body = $post['post_body'];
 $author = $post['user'];
 $reads = $post['read'];
 $likes = $post['like'];
-$post_date = $post['post_date'];
+$post_date = $post['post_date']; //String object
+$post_date = date_create($post_date); // DateTime object
+$post_date = date_format($post_date, "jS, F, Y.");
 $comments = get_comments_by_id($post_id);
 
 ?>
@@ -144,11 +153,11 @@ $comments = get_comments_by_id($post_id);
 
     <div class="bg-light m-3">
         <div class="card-body">
-            <h4 class="card-title m-5"><?= $post_title ?></h4>
+            <h4 class="card-title m-5 text-center"><?= $post_title ?></h4>
             <div class="container">
                 <div class="row border-bottom">
-                    <span class="col card-subtitle text-muted mb-2">By <?= $author ?></span>
-                    <span class="col card-subtitle text-muted mb-2"> Posted on: <?= $post_date ?></span>
+                    <span class="col card-subtitle text-center text-muted mb-2">By <?= $author ?></span>
+                    <span class="col card-subtitle text-center text-muted mb-2"> Posted on: <?= $post_date ?></span>
                 </div>
                 <div class="row">
                     <div class="col">
@@ -156,11 +165,14 @@ $comments = get_comments_by_id($post_id);
                     </div>
                 </div>
                 <div class="row border-top mt-2">
-                    <div class="col">
-                        <?= $isLiked != '0' ? '<a href="<?=togglelike.php?post_id=<?= $post_id ?>&user_id=<?= $user_id ?>&isLiked=0"?>>Like</a>' 
-                        : '<a href="togglelike.php?post_id=<?= $post_id ?>&user_id=<?= $user_id ?>&isLiked=1">Dislike</a>' ?>
+                    <div class="col text-center">
+                        <?php if ($isLiked != 0) : ?>
+                            <a href="togglelike.php?post_id=<?= $post_id . '&user_id=' . $user_id . '&isLiked=0' ?>">Like</a>
+                        <?php else : ?>
+                            <a href="togglelike.php?post_id=<?= $post_id . '&user_id=' . $user_id . '&isLiked=1' ?>">DisLike</a>
+                        <?php endif ?>
                     </div>
-                    <div class="col">
+                    <div class="col text-center">
                         <?php if ($likes > 0) : ?>
                             <a href="postlikes.php?id=<?= $post_id ?>">
                             <?php endif; ?>
@@ -169,7 +181,7 @@ $comments = get_comments_by_id($post_id);
                             </a>
                         <?php endif; ?>
                     </div>
-                    <div class="col">
+                    <div class="col text-center">
                         <?php if ($reads > 0) : ?>
                             <a href="postreads.php?id=<?= $post_id ?>">
                             <?php endif; ?>
