@@ -45,23 +45,20 @@ One copy of this code is also deployed on live server at https://2k18-csm-84.000
 
 ### Login Steps
 
-![Login-Home-Logout](images\Inkedr2.gif)
+![Login-Home-Logout](images/Inkedr2.gif)
 
 ### Read, Like, and, Comment on Post
 
-![Read-Like-Comment](images\Inkedr1.gif)
+![Read-Like-Comment](images/Inkedr1.gif)
 
 ### Add Task
 
-![AddTask](images\AddTask.gif)
+![AddTask](images/AddTask.gif)
 
 ### Update Task
 
-![UpdateTask](images\UpdateTask.gif)
+![UpdateTask](images/UpdateTask.gif)
 
 ### Delete Task
 
-![DeleteTask](images\DeleteTask.gif)
-
-
-# Feedback me at 
+![DeleteTask](images/DeleteTask.gif)
