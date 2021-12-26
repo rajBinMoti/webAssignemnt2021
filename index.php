@@ -41,28 +41,29 @@ if (isset($_POST['user-name'])) {
 
 <body>
 	<?php include "header.php"; ?>
-	<div style="text-align: center">
-		<h1>Login Form</h1>
+	<div style="text-align: center" class="container">
+		<h1 class="display-1">Login Form</h1>
 		<?php if (isset($login_fail_message)) : ?>
 			<div class="error-message"><?= $login_fail_message; ?></div>
 		<?php endif; ?>
-
-		<form method="POST" action="<?= $_SERVER['PHP_SELF'] ?>">
-			<div>
-				<label>User Name
-					<input type="text" name="user-name" required />
-				</label>
-			</div>
-			<div>
-				<label>User Password
-					<input type="password" name="user-pass" required />
-				</label>
-			</div>
-			<div>
-				<input type="submit" value="Submit" />
-				<a href="signup.php">Not registered yet?</a>
-			</div>
-		</form>
+		<div class="row justify-content-center">
+			<form method="POST" action="<?= $_SERVER['PHP_SELF'] ?>" class="col-3">
+				<div class="mb-3">
+					<label class="form-label">User Name
+						<input class="form-control" type="text" name="user-name" required />
+					</label>
+				</div>
+				<div class="mb-3">
+					<label class="form-label">User Password
+						<input class="form-control" type="password" name="user-pass" required />
+					</label>
+				</div>
+				<div>
+					<input class="form-control btn-info" type="submit" value="Submit" />
+					<a href="signup.php">Not registered yet?</a>
+				</div>
+			</form>
+		</div>
 	</div>
 </body>
 

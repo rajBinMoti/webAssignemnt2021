@@ -6,31 +6,7 @@ if (isset($_SESSION['_user'])) {
 }
 
 require_once './utilities/db.php';
-
-function update_post($post_id, $post_title, $post_body, $post_check)
-{
-    try {
-        $db = db_connect();
-        $statement = "
-        UPDATE blogpost SET post_title = :post_title, post_body = :post_body, post_public = :post_check WHERE post_id = :post_id;
-        ";
-
-        // print_r($post_check);
-        // die();
-
-        $statement = $db->prepare($statement);
-        $statement->bindParam(":post_id", $post_id);
-        $statement->bindParam(":post_title", $post_title);
-        $statement->bindParam(":post_body", $post_body);
-        $statement->bindParam(":post_check", $post_check);
-
-        $statement->execute();
-
-        return "UPDATED";
-    } catch (PDOException $e) {
-        return "ERROR";
-    }
-}
+require_once './utilities/post.php';
 
 if (isset($_POST['update-post'])) {
     $post_id = $_GET['post-id'];

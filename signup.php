@@ -15,7 +15,7 @@ if (isset($_POST['user-name'])) {
             $_SESSION["_user"] = $user;
             header("Location: home.php");
         }
-    }else{
+    } else {
         $login_fail_message = "user name already taken";
     }
 }
@@ -32,7 +32,7 @@ if (isset($_POST['user-name'])) {
 <body>
     <?php include "header.php"; ?>
     <div style="text-align: center">
-        <h1>Register Form</h1>
+        <h1 class="display-1">Register Form</h1>
         <?php if (isset($login_fail_message)) : ?>
             <div class="error-message"><?= $login_fail_message; ?></div>
         <?php endif; ?>

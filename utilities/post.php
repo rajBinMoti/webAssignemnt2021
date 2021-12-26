@@ -46,3 +46,25 @@ function get_user_posts($user_id)
         return "ERROR";
     }
 }
+
+function update_post($post_id, $post_title, $post_body, $post_check)
+{
+    try {
+        $db = db_connect();
+        $statement = "
+        UPDATE blogpost SET post_title = :post_title, post_body = :post_body, post_public = :post_check WHERE post_id = :post_id;
+        ";
+
+        $statement = $db->prepare($statement);
+        $statement->bindParam(":post_id", $post_id);
+        $statement->bindParam(":post_title", $post_title);
+        $statement->bindParam(":post_body", $post_body);
+        $statement->bindParam(":post_check", $post_check);
+
+        $statement->execute();
+
+        return "UPDATED";
+    } catch (PDOException $e) {
+        return "ERROR";
+    }
+}
