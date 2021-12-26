@@ -14,7 +14,7 @@ $blogposts = get_all_posts();
 
 <head>
 	<meta charset="UTF-8" />
-	<link rel="stylesheet" href="style.css">
+	<!-- <link rel="stylesheet" href="style.css"> -->
 	<title>Home</title>
 </head>
 
@@ -23,7 +23,7 @@ $blogposts = get_all_posts();
 	<?php include "header.php"; ?>
 
 	<div style="text-align: center">
-		<h1>This is home page</h1>
+		<h1 class="display-1">This is home page</h1>
 		<?php
 		if ($blogposts != null) :
 			foreach ($blogposts as $blogpost) :
@@ -40,7 +40,7 @@ $blogposts = get_all_posts();
 		?>
 				<div class="card mt-2 bg-light" style="width: 80%; margin:auto;">
 					<div class="card-body">
-						<h5 class="card-title"><?= $post_title ?></h5>
+						<h5 class="card-title display-5"><?= $post_title ?></h5>
 						<div class="container">
 							<div class="row border-bottom">
 								<span class="col card-subtitle text-muted mb-2">By <?= $author ?></span>

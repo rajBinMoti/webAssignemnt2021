@@ -51,21 +51,25 @@ if (isset($_GET['post-id'])) {
 
 <body>
     <?php require_once 'header.php' ?>
-    <form action="" method="post" class="m-3">
-        <div class="mb-3">
-            <label for="post-title" class="form-label">Post Title</label>
-            <input type="text" class="form-control" value='<?= ($post['post_title']) ?>' name="post-title" required>
-        </div>
-        <div class="mb-3">
-            <label for="post-body" class="form-label">Post Body</label>
-            <textarea type="text" class="form-control" name="post-body" value='<?= ($post['post_body']) ?>' required><?= ($post['post_body']) ?></textarea>
-        </div>
-        <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" name="post-check" <?= $post['post_public'] == '1'  ? 'checked' : '' ?>>
-            <label for="post-check" class="form-label">Publish</label>
-        </div>
-        <button class="btn btn-primary" name="update-post" size='sm'>UPDATE</button>
-    </form>
+    <div class="container">
+        <p class="display-4 text-center">Edit Post</p>
+
+        <form action="" method="post" class="m-3">
+            <div class="mb-3">
+                <label for="post-title" class="form-label h4">Post Title</label>
+                <input type="text" class="form-control" value='<?= ($post['post_title']) ?>' name="post-title" required>
+            </div>
+            <div class="mb-3">
+                <label for="post-body" class="form-label h4">Post Body</label>
+                <textarea rows="10" type="text" class="form-control" name="post-body" value='<?= ($post['post_body']) ?>' required><?= ($post['post_body']) ?></textarea>
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" name="post-check" <?= $post['post_public'] == '1'  ? 'checked' : '' ?>>
+                <label for="post-check" class="form-label">Publish</label>
+            </div>
+            <button class="btn btn-primary" name="update-post" size='sm'>UPDATE</button>
+        </form>
+    </div>
 </body>
 
 </html>

@@ -41,33 +41,43 @@ if (isset($_POST['delete-post'])) {
 </head>
 
 <body>
-
     <?php require_once 'header.php'; ?>
 
-    <?php if (isset($user_posts) && sizeof($user_posts) > 0) : ?>
-        <?php foreach ($user_posts as $key => $value) : ?>
-            <div class="m-3 bg-light">
-                <h2><?= $value['post_title']  ?></h2>
-                <p><?= $value['post_body']  ?></p>
-                <form action="editpost.php" method="get">
-                    <input type="text" name="post-id" value="<?= $value['post_id'] ?>" hidden>
-                    <input type="submit" value="Edit post here" class="btn btn-link link-primary">
-                </form>
-                <form action="" method="post">
-                    <input type="text" name="post-id" value="<?= $value['post_id'] ?>" hidden>
-                    <input type="submit" name="delete-post" value="Delete" class="btn btn-danger btn-sm">
-                </form>
+    <div class="container">
+
+
+        <?php if (isset($user_posts) && sizeof($user_posts) > 0) : ?>
+            <?php foreach ($user_posts as $key => $value) : ?>
+                <div class="m-3 bg-light">
+                    <h2><?= $value['post_title']  ?></h2>
+                    <p><?= $value['post_body']  ?></p>
+                    <div class="row">
+                        <div class="col">
+                            <form action="" method="post">
+                                <input type="text" name="post-id" value="<?= $value['post_id'] ?>" hidden>
+                                <input type="submit" name="delete-post" value="Delete" class="btn btn-danger btn-sm">
+                            </form>
+                        </div>
+                        <div class="col">
+                            <form action="editpost.php" method="get">
+                                <input type="text" name="post-id" value="<?= $value['post_id'] ?>" hidden>
+                                <input type="submit" value=" ✎ Edit post here" class="btn btn-link link-primary">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            <?php endforeach ?>
+
+        <?php else : ?>
+            <div class="bg-light w-80 m-4">
+                <h5 class="h5">No Blog Posted Yet! <a href="./addpost.php"> Click here to add first blog! </a></h5>
             </div>
-
-        <?php endforeach ?>
-
-    <?php else : ?>
-        <div class="bg-light w-80 m-4">
-            <h5 class="h5">No Blog Posted Yet! <a href="./addpost.php"> Click here to add first blog! </a></h5>
-        </div>
-    <?php endif ?>
+        <?php endif ?>
 
 
+
+    </div>
 </body>
 
 </html>

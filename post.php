@@ -61,7 +61,7 @@ $comments = get_comments_by_id($post_id);
 
     <div class="bg-light m-3">
         <div class="card-body">
-            <h4 class="card-title m-5 text-center"><?= $post_title ?></h4>
+            <h4 class="card-title m-5 text-center display-4"><?= $post_title ?></h4>
             <div class="container">
                 <div class="row border-bottom">
                     <span class="col card-subtitle text-center text-muted mb-2">By <?= $author ?></span>
