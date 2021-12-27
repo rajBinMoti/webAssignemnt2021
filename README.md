@@ -32,6 +32,10 @@ Clone this repo using git clone https://github.com/rajBinMoti/webAssignemnt2021 
 
 Note! To safe remove the dummy database: http://localhost/blog-host/uninstall.php
 
+## Updated ERD
+
+![ERD](db/blog-host-new.jpg)
+
 ## How to run the application
 
 Open browser and visit http://localhost/blog-host and test it on local server.
